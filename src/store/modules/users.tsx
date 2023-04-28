@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import {PayloadAction} from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit'
 import http from "../../utils/http";
 
 type Token = string
-type Infos = {
+export type Infos = {
     [index: string]: unknown
 }
 

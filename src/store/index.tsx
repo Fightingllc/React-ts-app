@@ -12,10 +12,11 @@ import {
     PURGE,
     REGISTER,
   } from 'redux-persist'
-import { PersistPartial } from "redux-persist/es/persistReducer";
-import storage from "redux-persist/lib/storage";
+  import type { PersistPartial } from 'redux-persist/es/persistReducer'
+  import storage from "redux-persist/lib/storage";
 
-import usersReducer, { UsersState } from '../store/modules/users'
+import usersReducer from './modules/users'
+import type { UsersState } from './modules/users'
 
 
 const persistConfig = {
@@ -28,7 +29,7 @@ const persistConfig = {
 
 const store = configureStore({
     reducer: {
-        users: persistReducer(persistConfig,usersReducer) as Reducer<UsersState & PersistPartial, AnyAction>
+      users: persistReducer(persistConfig, usersReducer) as Reducer<UsersState & PersistPartial, AnyAction>,
     },
     middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -1,5 +1,8 @@
 import axios from 'axios'
 import type { AxiosRequestConfig, AxiosResponse } from 'axios'
+import store from '../store';
+import { clearToken } from '../store/modules/users';
+import { message } from 'antd';
 
 // 分装axios
 const instance = axios.create({
@@ -8,6 +11,10 @@ const instance = axios.create({
 })
 
 instance.interceptors.request.use(function (config) {
+    // 设置请求头
+    if(config.headers) {
+        config.headers.Authorization = store.getState().users.token;
+    }
     return config;
 }, function (error) {
     return Promise.reject(error)
@@ -15,6 +22,14 @@ instance.interceptors.request.use(function (config) {
 
 // 添加响应拦截器
 instance.interceptors.response.use(function (response) {
+    if(response.data.errmsg === 'token error') {
+        message.error('token error')
+        store.dispatch(clearToken())
+        // 刷新页面
+        setTimeout(() => {
+            window.location.replace('/login')
+        },1000)
+    }
     return response
 }, function (error) {
     return Promise.reject(error)

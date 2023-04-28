@@ -4,7 +4,6 @@ import './index.css';
 import './assets/styles/reset.scss';
 import './assets/styles/iconfont.scss';
 import './assets/styles/common.scss';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import { RouterProvider } from 'react-router-dom';
