@@ -20,7 +20,7 @@ export default function BeforeEach(props: BeforeEachProps) {
     const token = useSelector((state: RootState) => state.users.token)
     const infos = useSelector((state: RootState) => state.users.infos)
 
-    console.log("infos",infos);
+    // console.log("infos",infos);
     
     const dispatch = useAppDispatch()
     // 对路由做导航守卫

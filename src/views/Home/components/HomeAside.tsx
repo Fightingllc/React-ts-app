@@ -9,6 +9,7 @@ import _ from 'lodash'
 import { useLocation, matchRoutes, Link } from 'react-router-dom'
 
 export default function HomeAside() {
+  // 获取用户权限  根据权限来控制菜单栏的显示情况
   const permission = useSelector((state: RootState)=> state.users.infos.permission) as unknown[]
   const location = useLocation()
   const matchs = matchRoutes(routes, location)
@@ -17,6 +18,8 @@ export default function HomeAside() {
   
   
   const menus = _.cloneDeep(routes).filter((v)=> {
+    // console.log('v',v);
+    
     v.children = v.children?.filter((v)=> v.meta?.menu && permission?.includes(v.name))
     return v.meta?.menu && permission?.includes(v.name)
   })
