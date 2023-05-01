@@ -17,6 +17,7 @@ import {
 
 import usersReducer from './modules/users'
 import signsReducer from './modules/signs'
+import checksReducer from './modules/checks'
 import type { UsersState } from './modules/users'
 
 const persistConfig = {
@@ -30,7 +31,8 @@ const persistConfig = {
 const store = configureStore({
     reducer: {
       users: persistReducer(persistConfig, usersReducer) as Reducer<UsersState & PersistPartial, AnyAction>,
-      signs: signsReducer
+      signs: signsReducer,
+      checks: checksReducer,
     },
     middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
