@@ -1,23 +1,50 @@
+/*
+ * @Author: 刘凌晨 liulingchen1109@163.com
+ * @Date: 2023-04-29 16:37:28
+ * @LastEditTime: 2023-05-02 19:06:03
+ * @FilePath: \React-ts-app\src\views\Home\components\HomeHeader.tsx
+ */
 import { BellOutlined } from "@ant-design/icons";
 import { Avatar, Badge, Dropdown, Space } from "antd";
 import classNames from "classnames";
 import styles from "../Home.module.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { useAppDispatch } from "../../../store";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from '../../../store';
 import type { RootState } from "../../../store";
 import type { MenuProps } from "antd";
 import { clearToken } from "../../../store/modules/users";
+import { getRemindAction, updateInfo } from '../../../store/modules/news';
+import type { Info } from '../../../store/modules/news';
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function HomeHeader() {
-  const name = useSelector(
-    (state: RootState) => state.users.infos.name
-  ) as string;
-  // debugger
-  const head = useSelector(
-    (state: RootState) => state.users.infos.head
-  ) as string;
+  // const name = useSelector(
+  //   (state: RootState) => state.users.infos.name
+  // ) as string;
+  // // debugger
+  // const head = useSelector(
+  //   (state: RootState) => state.users.infos.head
+  // ) as string;
 
-  const dispatch = useDispatch();
+  const name = useSelector((state: RootState)=> state.users.infos.name) as string 
+  const head = useSelector((state: RootState)=> state.users.infos.head) as string
+  const _id = useSelector((state: RootState)=> state.users.infos._id) as string
+  const newsInfo = useSelector((state: RootState)=> state.news.info)
+
+  const dispatch = useAppDispatch();
+  const isDot = (newsInfo.applicant || newsInfo.approver) as boolean | undefined;
+
+  useEffect(()=>{
+    dispatch(getRemindAction({userid: _id})).then((action)=>{
+      const { errcode, info } = (
+        action.payload as { [index: string]: unknown }
+      ).data as { [index: string]: unknown }
+      if (errcode === 0) {
+        dispatch(updateInfo(info as Info))
+      }
+    })
+  }, [dispatch, _id])
 
   const handleLogout = () => {
     dispatch(clearToken())
@@ -33,6 +60,25 @@ export default function HomeHeader() {
     },
   ];
 
+  if( newsInfo.applicant ){
+    items1.push({
+      key: '1',
+      label: <Link to="/apply">有审批结果消息</Link>
+    })
+  }
+  if( newsInfo.approver ){
+    items1.push({
+      key: '2',
+      label: <Link to="/check">有审批请求消息</Link>
+    })
+  }
+  if(!newsInfo.applicant && !newsInfo.approver){
+    items1.push({
+      key: '3',
+      label: <div>暂无消息</div>
+    })
+  }
+  
   const items2: MenuProps["items"] = [
     {
       key: "1",
@@ -65,7 +111,7 @@ export default function HomeHeader() {
       </span>
       <span className={styles["home-header-title"]}>在线考勤系统</span>
       <Dropdown menu={{ items: items1 }} arrow placement="bottom">
-        <Badge dot>
+        <Badge dot={isDot}>
           <BellOutlined style={{ fontSize: 20 }} />
         </Badge>
       </Dropdown>

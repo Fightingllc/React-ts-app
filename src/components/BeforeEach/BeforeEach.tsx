@@ -1,3 +1,9 @@
+/*
+ * @Author: 刘凌晨 liulingchen1109@163.com
+ * @Date: 2023-04-29 16:37:28
+ * @LastEditTime: 2023-05-02 19:28:38
+ * @FilePath: \React-ts-app\src\components\BeforeEach\BeforeEach.tsx
+ */
 import React from "react";
 import {useLocation, matchRoutes, Navigate} from 'react-router-dom'
 import {routes} from '../../router'
@@ -33,6 +39,7 @@ export default function BeforeEach(props: BeforeEachProps) {
     //  由于matchs中的最后一项类型不确定 所以加个类型保护(isArray)
     if( Array.isArray(matchs)) {
         const meta = matchs[matchs.length - 1].route.meta
+        const name = matchs[matchs.length-1].route.name
 
         if(meta?.auth && _.isEmpty(infos)) {   
             if(token) {
@@ -50,6 +57,9 @@ export default function BeforeEach(props: BeforeEachProps) {
              return <Navigate to="/login" />
             }
         }
+        else if( Array.isArray(infos.permission) && !infos.permission.includes(name) ){
+            return <Navigate to="/403" />
+          }
     }
     // 登录成功后go home
     if(token && location.pathname === '/login'){

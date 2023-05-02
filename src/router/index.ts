@@ -14,6 +14,9 @@ const Check = lazy(() => import('../views/Check/Check'))
 const Login = lazy(() => import('../views/Login/Login'))
 // 导航守卫
 const BeforeEach = lazy(() => import("../components/BeforeEach/BeforeEach"))
+const NotAuth = lazy(()=> import('../views/NotAuth/NotAuth'))
+const NotFound = lazy(()=> import('../views/NotFound/NotFound'))
+const NotServer = lazy(()=> import('../views/NotServer/NotServer'))
 
 // 扩展meta元信息接口与全局守卫
 declare module 'react-router' {
@@ -104,7 +107,23 @@ export const routes: RouteObject[]= [
  {
     path: '/login',
     element: React.createElement(BeforeEach, null, React.createElement(Login)),
-}
+},
+{
+    path: '/403',
+    element: React.createElement(NotAuth)
+  },
+  {
+    path: '/404',
+    element: React.createElement(NotFound)
+  },
+  {
+    path: '/500',
+    element: React.createElement(NotServer)
+  },
+  {
+    path: '*',
+    element: React.createElement(Navigate, {to: '/404'})
+  }
 ]
 
 const router = createBrowserRouter(routes);

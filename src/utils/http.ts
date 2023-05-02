@@ -1,8 +1,15 @@
+/*
+ * @Author: 刘凌晨 liulingchen1109@163.com
+ * @Date: 2023-04-29 16:37:28
+ * @LastEditTime: 2023-05-02 19:35:18
+ * @FilePath: \React-ts-app\src\utils\http.ts
+ */
 import axios from 'axios'
 import type { AxiosRequestConfig, AxiosResponse } from 'axios'
 import store from '../store';
 import { clearToken } from '../store/modules/users';
 import { message } from 'antd';
+import router from '../router';
 
 // 分装axios
 const instance = axios.create({
@@ -29,6 +36,9 @@ instance.interceptors.response.use(function (response) {
         setTimeout(() => {
             window.location.replace('/login')
         },1000)
+    }
+    else if(response.data.errmsg === 'error'){
+        router.navigate('/500');
     }
     return response
 }, function (error) {
